@@ -22,9 +22,6 @@ class Window:
         self.CLOCK = pygame.time.Clock()
         self.delta_time = 0
 
-        self.current = time.time()
-        self.__elapsed_time = 0
-
     
 
     def reload_display(self, size:tuple=(1280, 720), flags:int=0, frame_rate:int=60):
@@ -39,9 +36,6 @@ class Window:
 
         self.CLOCK = pygame.time.Clock()
         self.delta_time = 0
-
-        self.current = 0
-        self.__elapsed_time = 0
     
 
 
@@ -56,13 +50,6 @@ class Window:
     def fps(self):
 
         return self.CLOCK.get_fps()
-    
-
-
-    @property
-    def elapsed_time(self):
-
-        return self.__elapsed_time
 
 
 
@@ -73,9 +60,6 @@ class Window:
 
 
     def cycle(self):
-        
-        self.current = time.time()
-        self.__elapsed_time = self.current - self.__elapsed_time
 
         pygame.display.update()
         self.delta_time = self.CLOCK.tick(self.frame_rate) / 1000
