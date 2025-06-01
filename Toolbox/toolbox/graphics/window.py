@@ -53,9 +53,9 @@ class Window:
 
 
 
-    def clear(self):
+    def clear(self, fill_color:tuple[int, int, int]=(20, 20, 20)):
 
-        self.DISPLAY.fill((20, 20, 20))
+        self.DISPLAY.fill(fill_color)
     
 
 

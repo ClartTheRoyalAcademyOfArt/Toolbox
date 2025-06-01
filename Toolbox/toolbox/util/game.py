@@ -30,5 +30,4 @@ class Game:
         self.running = True
 
         while self.running:
-
             self.update()
