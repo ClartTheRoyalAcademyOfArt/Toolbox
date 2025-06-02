@@ -13,7 +13,7 @@ class Game:
     
 
     def update(self):
-
+    
         pass
 
 
@@ -26,6 +26,9 @@ class Game:
 
 
     def run(self):
+        """
+        Run game loop
+        """
 
         self.running = True
 

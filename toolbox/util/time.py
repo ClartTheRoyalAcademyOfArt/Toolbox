@@ -25,7 +25,10 @@ class TimeoutTimer:
 
 
     def start(self):
-        
+        """
+        Starts timer from zero
+        """
+
         if self._timedout:
             raise RuntimeError("Timer cannot be started while timedout. Use reset()")
         if self._time_paused is not None:
@@ -38,6 +41,11 @@ class TimeoutTimer:
 
 
     def stop(self, timeout:bool=False):
+        """
+        Stops running timer, resets values, sets self._active to False
+
+        timeout : if True, calls self.timeout()
+        """
 
         if self._timedout:
             raise RuntimeError("Timer cannot be stopped while timedout. Use reset()")
@@ -53,6 +61,9 @@ class TimeoutTimer:
     
 
     def pause(self):
+        """
+        Pauses running timer, sets self._active to False.
+        """
 
         if self._timedout:
             raise RuntimeError("Timer cannot be paused while timedout.")
@@ -65,6 +76,9 @@ class TimeoutTimer:
 
     
     def resume(self):
+        """
+        Resumes paused timer.
+        """
 
         if self._timedout:
             raise RuntimeError("Timer cannot be resumed while timedout. Use reset()")
@@ -77,6 +91,11 @@ class TimeoutTimer:
     
 
     def reset(self, start_immediately:bool=False):
+        """
+        Reset timer to zero.
+
+        start_immediately : if True, timer starts immediately
+        """
 
         self._active = start_immediately
        
@@ -89,24 +108,36 @@ class TimeoutTimer:
 
 
     def time_elapsed(self):
+        """
+        Returns elapsed time.
+        """
 
         return self._time_elapsed
     
 
 
     def active(self):
+        """
+        Returns True if active.
+        """
 
         return self._active
 
 
 
     def timedout(self):
+        """
+        Returns if timedout.
+        """
 
         return self._timedout
 
 
     
     def tick(self):
+        """
+        Ticks timer, timesout if duration is exceeded.
+        """
 
         if self._active:
             current = time.time()
@@ -118,7 +149,10 @@ class TimeoutTimer:
 
 
     def timeout(self):
-        
+        """
+        Timesout timer.
+        """
+
         self._timedout = True
 
         self._active = False
@@ -153,6 +187,14 @@ class TimerManager:
 
 
     def create_timer(self, timer_id:str, duration:float, callback:callable=None, start_immediately:bool=False):
+        """
+        Creates new timer.
+
+        timer_id : string id for new timer
+        duration : duration in seconds for new timer
+        callback : optional callback on timeout
+        start_immediately : if True, starts new timer immediately
+        """
 
         if timer_id not in self._timers.keys():
             self._timers[timer_id] = TimeoutTimer(duration, callback, start_immediately)
@@ -160,6 +202,11 @@ class TimerManager:
     
 
     def delete_timer(self, timer_id:str):
+        """
+        Delete a timer.
+
+        timer_id : timer to delete
+        """
 
         if timer_id in self._timers.keys():
             del self._timers[timer_id]
@@ -167,6 +214,9 @@ class TimerManager:
 
     
     def tick_all(self):
+        """
+        Ticks all timers.
+        """
 
         for timers in self._timers.values():
 
@@ -176,30 +226,51 @@ class TimerManager:
 
     @property
     def timers(self):
+        """
+        Timer dictionary
+        """
 
         return self._timers
     
 
 
     def exists(self, timer_id:str):
+        """
+        Returns True if timer exists.
+
+        timer_id : timer to check
+        """
 
         return timer_id in self._timers
     
 
 
     def get_timer(self, timer_id:str):
+        """
+        Return a timer's object.
+
+        timer_id : timer to return
+        """
 
         return self._timers.get(timer_id)
     
 
 
     def get_all_active(self):
+        """
+        Returns all active timers.
+        """
 
         return {timer_id: t for timer_id, t in self._timers.items() if t.active()}
     
     
 
     def is_active(self, timer_id:str):
+        """
+        Returns True if specified timer is active.
+
+        timer_id : timer to check
+        """
 
         timer = self.get_timer(timer_id)
 
@@ -211,6 +282,11 @@ class TimerManager:
 
 
     def get_time_elapsed(self, timer_id:str):
+        """
+        Get time elapsed for specified timer.
+
+        timer_id : timer's elapsed time to get
+        """
 
         timer = self.get_timer(timer_id)
 
@@ -222,6 +298,11 @@ class TimerManager:
 
 
     def is_timedout(self, timer_id:str):
+        """
+        Returns True if specified timer is timedout.
+
+        timer_id : timer to check
+        """
 
         timer = self.get_timer(timer_id)
 
