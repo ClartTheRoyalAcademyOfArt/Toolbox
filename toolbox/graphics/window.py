@@ -29,7 +29,7 @@ class Window:
 
     
 
-    def reload_display(self, size:tuple=(1280, 720), flags:int=0, frame_rate:int=60):
+    def reload_display(self, size:tuple=(1280, 720), flags:int=0, frame_rate:int=60) -> None:
         """
         Reloads the display with the passed values.
 
@@ -52,7 +52,7 @@ class Window:
 
 
     @property
-    def dt(self):
+    def dt(self) -> float:
         """
         Returns self.delta_time
         """
@@ -62,7 +62,7 @@ class Window:
 
 
     @property
-    def fps(self):
+    def fps(self) -> float:
         """
         Returns self.CLOCK.get_fps()
         """
@@ -71,7 +71,7 @@ class Window:
 
 
 
-    def clear(self, fill_color:tuple[int, int, int]=(20, 20, 20)):
+    def clear(self, fill_color:tuple[int, int, int]=(20, 20, 20)) -> None:
         """
         Fills the display with the passed RGB values
 
@@ -82,7 +82,7 @@ class Window:
     
 
 
-    def cycle(self):
+    def cycle(self) -> None:
         """
         Updates the display, updates self.delta_time, cycles CLOCK
         """

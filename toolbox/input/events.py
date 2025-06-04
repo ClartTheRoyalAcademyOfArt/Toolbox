@@ -1,39 +1,69 @@
 
+from typing import Callable
+
 import pygame
 
 
 
-def get_events():
-    """
-    Returns a list of all active events.
-    """
-    return pygame.event.get()
+class EventManager:
 
-
-
-def is_event(pygame_event:pygame.event):
-    """
-    Returns True if passed event is active, else False.
-
-    pygame_event : the pygame.event to check for
-    """
-
-    for event in get_events():
-        if event.type == pygame_event:
-            return True
+    def __init__(self):
         
-    return False
+        self._events = []
+
+
+    
+    def poll(self) -> None:
+        """
+        Poll and cache all current events. Call once per frame.
+        """
+
+        self._events = pygame.event.get()
 
 
 
-def handle_event(pygame_event:pygame.event, callback:callable):
-    """
-    Calls a callback if the passed event is active.
+    def is_event(self, event_type:int):
+        """
+        Returns True if the specified event type is in the current frame's events.
 
-    pygame_event : the pygame.event to check for
-    callback : the callable to callback
-    """
+        event_type : an int constant from pygame (e.g. pygame.QUIT)
+        """
 
-    for event in get_events():
-        if event.type == pygame_event:
-            callback()
+        return any(event.type == event_type for event in self._events)
+    
+
+
+    def handle_event(self, event_type:int, callback:Callable[[], None]) -> None:
+        """
+        Calls a callback (no-arg) if specified event type is in the current frame's events.
+
+        event_type : an int constant from pygame (e.g. pygame.QUIT)
+        callback : a callable to callback on an event hit.
+        """
+
+        for event in self._events:
+            if event.type == event_type:
+                callback()
+
+    
+
+    def handle_event_with(self, event_type:int, callback:Callable[[pygame.event.Event], None]) -> None:
+        """
+        Calls a callback if specified event type is in the current frame's events. Passes event_type to the callback.
+
+        event_type : an int constant from pygame (e.g. pygame.QUIT)
+        callback : a callable to callback on an event hit.
+        """
+
+        for event in self._events:
+            if event.type == event_type:
+                callback(event)
+    
+
+
+    def get(self) -> list[pygame.event.Event]:
+        """
+        Returns all events polled in the current frame.
+        """
+
+        return self._events

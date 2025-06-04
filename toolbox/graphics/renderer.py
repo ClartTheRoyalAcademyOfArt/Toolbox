@@ -11,7 +11,7 @@ class Renderer:
     
 
 
-    def create_queue(self, queue_id:str):
+    def create_queue(self, queue_id:str) -> None:
         """
         Create a new queue
 
@@ -22,7 +22,7 @@ class Renderer:
 
 
 
-    def delete_queue(self, queue_id:str):
+    def delete_queue(self, queue_id:str) -> None:
         """
         Delete specified queue
 
@@ -33,7 +33,7 @@ class Renderer:
     
 
 
-    def get_queue(self, queue_id:str=None, return_all=False):
+    def get_queue(self, queue_id:str=None, return_all=False) -> dict:
         """
         Returns specified OR all queues
 
@@ -48,7 +48,7 @@ class Renderer:
     
 
 
-    def queue(self, queue_id:str, surface:pygame.Surface, position:tuple[int, int], z_layer:int=0):
+    def queue(self, queue_id:str, surface:pygame.Surface, position:tuple[int, int], z_layer:int=0) -> None:
         """
         Queue a surface for render
 
@@ -67,7 +67,7 @@ class Renderer:
 
 
 
-    def render(self, render_display:pygame.Surface, queue_id:str):
+    def render(self, render_display:pygame.Surface, queue_id:str) -> None:
         """
         Blits surfaces of the passed queue to the passed surface
 

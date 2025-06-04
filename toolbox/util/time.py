@@ -24,7 +24,7 @@ class TimeoutTimer:
     
 
 
-    def start(self):
+    def start(self) -> None:
         """
         Starts timer from zero
         """
@@ -40,7 +40,7 @@ class TimeoutTimer:
     
 
 
-    def stop(self, timeout:bool=False):
+    def stop(self, timeout:bool=False) -> None:
         """
         Stops running timer, resets values, sets self._active to False
 
@@ -60,7 +60,7 @@ class TimeoutTimer:
 
     
 
-    def pause(self):
+    def pause(self) -> None:
         """
         Pauses running timer, sets self._active to False.
         """
@@ -75,7 +75,7 @@ class TimeoutTimer:
     
 
     
-    def resume(self):
+    def resume(self) -> None:
         """
         Resumes paused timer.
         """
@@ -90,7 +90,7 @@ class TimeoutTimer:
         
     
 
-    def reset(self, start_immediately:bool=False):
+    def reset(self, start_immediately:bool=False) -> None:
         """
         Reset timer to zero.
 
@@ -107,7 +107,7 @@ class TimeoutTimer:
     
 
 
-    def time_elapsed(self):
+    def time_elapsed(self) -> float:
         """
         Returns elapsed time.
         """
@@ -116,7 +116,7 @@ class TimeoutTimer:
     
 
 
-    def active(self):
+    def active(self) -> bool:
         """
         Returns True if active.
         """
@@ -125,7 +125,7 @@ class TimeoutTimer:
 
 
 
-    def timedout(self):
+    def timedout(self) -> bool:
         """
         Returns if timedout.
         """
@@ -134,7 +134,7 @@ class TimeoutTimer:
 
 
     
-    def tick(self):
+    def tick(self) -> None:
         """
         Ticks timer, timesout if duration is exceeded.
         """
@@ -148,7 +148,7 @@ class TimeoutTimer:
     
 
 
-    def timeout(self):
+    def timeout(self) -> None:
         """
         Timesout timer.
         """
@@ -186,7 +186,7 @@ class TimerManager:
     
 
 
-    def create_timer(self, timer_id:str, duration:float, callback:callable=None, start_immediately:bool=False):
+    def create_timer(self, timer_id:str, duration:float, callback:callable=None, start_immediately:bool=False) -> None:
         """
         Creates new timer.
 
@@ -201,7 +201,7 @@ class TimerManager:
         
     
 
-    def delete_timer(self, timer_id:str):
+    def delete_timer(self, timer_id:str) -> None:
         """
         Delete a timer.
 
@@ -213,7 +213,7 @@ class TimerManager:
     
 
     
-    def tick_all(self):
+    def tick_all(self) -> None:
         """
         Ticks all timers.
         """
@@ -225,7 +225,7 @@ class TimerManager:
 
 
     @property
-    def timers(self):
+    def timers(self) -> dict[str, TimeoutTimer]:
         """
         Timer dictionary
         """
@@ -234,7 +234,7 @@ class TimerManager:
     
 
 
-    def exists(self, timer_id:str):
+    def exists(self, timer_id:str) -> bool:
         """
         Returns True if timer exists.
 
@@ -245,7 +245,7 @@ class TimerManager:
     
 
 
-    def get_timer(self, timer_id:str):
+    def get_timer(self, timer_id:str) -> TimeoutTimer:
         """
         Return a timer's object.
 
@@ -256,7 +256,7 @@ class TimerManager:
     
 
 
-    def get_all_active(self):
+    def get_all_active(self) -> dict[str, TimeoutTimer]:
         """
         Returns all active timers.
         """
@@ -265,7 +265,7 @@ class TimerManager:
     
     
 
-    def is_active(self, timer_id:str):
+    def is_active(self, timer_id:str) -> bool:
         """
         Returns True if specified timer is active.
 
@@ -281,7 +281,7 @@ class TimerManager:
     
 
 
-    def get_time_elapsed(self, timer_id:str):
+    def get_time_elapsed(self, timer_id:str) -> float:
         """
         Get time elapsed for specified timer.
 
@@ -297,7 +297,7 @@ class TimerManager:
 
 
 
-    def is_timedout(self, timer_id:str):
+    def is_timedout(self, timer_id:str) -> bool:
         """
         Returns True if specified timer is timedout.
 
