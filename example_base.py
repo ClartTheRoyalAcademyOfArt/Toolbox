@@ -1,18 +1,13 @@
+import sys
 
 import pygame
 
 import toolbox
 
 
-"""
-This script launches a window, and handles the pygame.QUIT event.
-
-Update function is not explicitly needed here because all logic is
-being handled in the toolbox.Game run() loop.
-"""
 
 
-class G(toolbox.Game):
+class GameWithToolbox(toolbox.Game):
 
     def __init__(self):
         super().__init__()
@@ -24,15 +19,55 @@ class G(toolbox.Game):
             (self.event.poll, 0),
             (lambda: self.event.handle_event(pygame.QUIT, self.quit_game), 1),
             (self.win.clear, 2),
-            (self.win.cycle, 2)
+            (self.win.cycle, 3)
         )
+
+
+
+
+
+
+
+
+
+
+class GameWithoutToolbox:
+
+    def __init__(self):
+        pygame.init()
+
+        self.WINDOW_WIDTH, self.WINDOW_HEIGHT = 1280, 720
+        self.DISPLAY = pygame.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
+
+        self.CLOCK = pygame.time.Clock()
+        self.FPS = 60
+
+        self.dt = 0
     
 
+
+    def handle_event(self):
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
     
-    def update(self):
-        
-        pass
+
+
+    def run(self):
+
+        while True:
+            self.DISPLAY.fill((20, 20, 20))
+
+            self.handle_event()
+
+            pygame.display.update()
+            self.dt = self.CLOCK.tick(self.FPS) / 1000
 
 
 
-G().run()
+
+
+GameWithToolbox().run()
+# GameWithoutToolbox().run()
