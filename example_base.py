@@ -1,8 +1,10 @@
-import sys
+
+import random
 
 import pygame
 
 import toolbox
+
 
 
 
@@ -15,60 +17,58 @@ class GameWithToolbox(toolbox.Game):
         self.win = toolbox.Window()
         self.event = toolbox.EventManager()
 
+        self.renderer = toolbox.Renderer()
+        self.renderer.create_queue("squares")
+        
+        self.timers = toolbox.TimerManager()
+        self.stopwatches = toolbox.StopwatchManager()
+
         self.add_pre_frame_update_batch(
             (self.event.poll, 0),
             (lambda: self.event.handle_event(pygame.QUIT, self.quit_game), 1),
-            (self.win.clear, 2)
+            (self.win.clear, 2),
+            (self.timers.tick_all, 2)
         )
 
         self.add_post_frame_update(self.win.cycle, 0)
 
 
+        self.timers.create_timer("debug_out", 5.0, self.debug, True)
+        self.timers.create_timer("generate_square", 0.25, self.generate_square, True)
+
+        self.stopwatches.create_new_stopwatch("window_runtime", True)
 
 
-
-
-
-
-
-
-class GameWithoutToolbox:
-
-    def __init__(self):
-        pygame.init()
-
-        self.WINDOW_WIDTH, self.WINDOW_HEIGHT = 1280, 720
-        self.DISPLAY = pygame.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
-
-        self.CLOCK = pygame.time.Clock()
-        self.FPS = 60
-
-        self.dt = 0
+        self.squares = []
     
 
 
-    def handle_event(self):
+    def generate_square(self):
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+        square = pygame.Surface(( random.randint(10, 50),  random.randint(10, 50)))
+        square.fill((random.randint(50, 255), random.randint(50, 255), random.randint(50, 255)))
+        self.squares.append((square, (random.randint(0, 1280), random.randint(0, 720))))
+
+        self.timers.timers["generate_square"].reset(True)
     
 
 
-    def run(self):
+    def debug(self):
 
-        while True:
-            self.DISPLAY.fill((20, 20, 20))
+        print(f"Runtime: {self.stopwatches.get_time_elapsed("window_runtime"):.2f}")
+        self.timers.timers["debug_out"].reset(True)
+    
 
-            self.handle_event()
 
-            pygame.display.update()
-            self.dt = self.CLOCK.tick(self.FPS) / 1000
+    def update(self):
+        
+        for square in self.squares:
+            self.renderer.queue("squares", square[0], square[1])
+
+        self.renderer.render(self.win.DISPLAY, "squares")
 
 
 
 
 
 GameWithToolbox().run()
-# GameWithoutToolbox().run()

@@ -7,7 +7,7 @@ class Renderer:
 
     def __init__(self):
         
-        self.render_queues = {}
+        self._render_queues = {}
     
 
 
@@ -18,7 +18,7 @@ class Renderer:
         queue_id : string id for new queue
         """
 
-        self.render_queues[queue_id] = {}
+        self._render_queues[queue_id] = {}
 
 
 
@@ -29,7 +29,7 @@ class Renderer:
         queue_id : queue to delete
         """
 
-        del self.render_queues[queue_id]
+        del self._render_queues[queue_id]
     
 
 
@@ -42,9 +42,9 @@ class Renderer:
         """
 
         if return_all:
-            return self.render_queues
+            return self._render_queues
         
-        return self.render_queues[queue_id]
+        return self._render_queues[queue_id]
     
 
 
@@ -60,10 +60,10 @@ class Renderer:
 
         key = z_layer
 
-        if key not in self.render_queues[queue_id]:
-            self.render_queues[queue_id][key] = []
+        if key not in self._render_queues[queue_id]:
+            self._render_queues[queue_id][key] = []
         
-        self.render_queues[queue_id][key].append((surface, position))
+        self._render_queues[queue_id][key].append((surface, position))
 
 
 
@@ -75,8 +75,8 @@ class Renderer:
         queue_id : queue to blit
         """
         
-        for z in sorted(self.render_queues[queue_id].keys()):
-            for surface, position in self.render_queues[queue_id][z]:
+        for z in sorted(self._render_queues[queue_id].keys()):
+            for surface, position in self._render_queues[queue_id][z]:
                 render_display.blit(surface, position)
             
-        self.render_queues[queue_id].clear()
+        self._render_queues[queue_id].clear()
