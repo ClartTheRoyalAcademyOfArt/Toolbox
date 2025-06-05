@@ -22,6 +22,12 @@ class Stopwatch:
 
     def start(self, initial_offset:float=0) -> None:
 
+        """
+        Starts the stopwatch.
+
+        initial_offset : adds a time offset to the start time
+        """
+
         if self._running:
             raise RuntimeError("Stopwatch cannot be started while running. use reset()")
         if self._paused:
@@ -38,6 +44,11 @@ class Stopwatch:
     
 
     def stop(self, return_elapsed:bool=True) -> None | float:
+        """
+        Stops the stopwatch.
+
+        return_elapsed : if True, will return the elapsed time at the time of the stop, else None
+        """
 
         if not self._running:
             raise RuntimeError("Stopwatch cannot be stopped while stopped. use reset()")
@@ -59,6 +70,9 @@ class Stopwatch:
     
 
     def resume(self) -> None:
+        """
+        Resumes a paused stopwatch.
+        """
 
         if not self._paused:
             raise RuntimeError("Stopwatch cannot be resumed while running.")
@@ -73,9 +87,14 @@ class Stopwatch:
 
 
     def pause(self, return_elapsed:bool=True) -> None:
+        """
+        Pauses the stopwatch.
+
+        return_elapsed : if True, returns the elapsed time at the time of pause, else None
+        """
 
         if self._paused:
-            raise RuntimeError("Stopwatch cannot be pasued while paused.")
+            raise RuntimeError("Stopwatch cannot be paused while already paused.")
         
         if self._running and not self._paused:
             self._time_paused = time.time()
@@ -87,6 +106,11 @@ class Stopwatch:
     
 
     def reset(self, start_immediately:bool = False) -> None:
+        """
+        Resets the stopwatch and all of its values.
+
+        start_immediately : if True, will run the stopwatch immediately
+        """
 
         self._start_time = time.time() if start_immediately else None
         self._elapsed_pause = 0
@@ -99,6 +123,9 @@ class Stopwatch:
     
 
     def lap(self) -> float:
+        """
+        Adds a new lap time.
+        """
 
         lap_time = self.get_time_elapsed()
         self._laps.append(lap_time)
@@ -108,12 +135,18 @@ class Stopwatch:
 
 
     def get_laps(self) -> list:
+        """
+        Returns a list of all lap times.
+        """
 
         return self._laps[:]
     
 
 
     def get_lap_durations(self) -> list:
+        """
+        Returns a list of the durations of each existing lap.
+        """
 
         durations = []
         last = 0.0
@@ -127,6 +160,9 @@ class Stopwatch:
 
 
     def get_time_elapsed(self) -> float:
+        """
+        Returns the time elapsed.
+        """
 
         if self._start_time is None:
             return 0.0
@@ -141,12 +177,18 @@ class Stopwatch:
 
 
     def is_paused(self):
+        """
+        Returns True if paused, else False.
+        """
 
         return self._paused
     
 
 
     def is_running(self):
+        """
+        Returns True if running, else False.
+        """
 
         return self._running
         
@@ -176,6 +218,12 @@ class StopwatchManager:
 
 
     def create_new_stopwatch(self, stopwatch_id:str, start_immediately:bool=False) -> None:
+        """
+        Creates a new stopwatch.
+
+        stopwatch_id : string id for stopwatch
+        start_immediately : if True, stopwatch will start immediately
+        """
 
         if stopwatch_id not in self._stopwatches.keys():
             self._stopwatches[stopwatch_id] = Stopwatch(start_immediately)
@@ -183,6 +231,11 @@ class StopwatchManager:
         
 
     def delete_stopwatch(self, stopwatch_id:str) -> None:
+        """
+        Deletes the specified stopwatch.
+
+        stopwatch_id : string id for stopwatch
+        """
 
         if stopwatch_id in self._stopwatches.keys():
             del self._stopwatches[stopwatch_id]
@@ -191,24 +244,45 @@ class StopwatchManager:
 
     @property
     def stopwatches(self) -> dict [str, Stopwatch]:
+        """
+        Returns a dictionary of all stopwatches
+        """
 
         return self._stopwatches
 
 
 
     def exists(self, stopwatch_id:str) -> bool:
+        """
+        Returns True if the specified stopwatch exists.
+
+        stopwatch_id : string id for stopwatch
+        """
 
         return stopwatch_id in self._stopwatches
 
 
 
     def get_stopwatch(self, stopwatch_id:str) -> Stopwatch:
+        """
+        Returns the specified stopwatch if it exists.
+
+        stopwatch_id : string id for stopwatch
+        """
+
+        if stopwatch_id not in self._stopwatches:
+            raise KeyError(f"Stopwatch '{stopwatch_id}' does not exist.")
 
         return self._stopwatches.get(stopwatch_id)
     
 
 
     def reset_all(self, start_immediately:bool = False) -> None:
+        """
+        Resets all stopwatches.
+
+        start_immediately : if True, all stopwatches will start running on reset
+        """
 
         for sw in self._stopwatches.values():
             sw.reset(start_immediately)
@@ -216,6 +290,11 @@ class StopwatchManager:
 
 
     def start_all(self, initial_offset:float = 0.0) -> None:
+        """
+        Starts all stopwatches.
+
+        initial_offset : applies an initial time offset to all stopwatches
+        """
 
         for sw in self._stopwatches.values():
             sw.start(initial_offset)
@@ -223,12 +302,20 @@ class StopwatchManager:
     
 
     def stop_all(self, return_elapsed: bool = False) -> dict[str, float | None]:
-        
+        """
+        Stops all stopwatches.
+
+        return_elapsed : if True, returns the elapsed time of all stopwatches at the time of stop, else None
+        """
+
         return {stopwatch_id: stopwatch.stop(return_elapsed) for stopwatch_id, stopwatch in self._stopwatches.items()}
 
 
 
     def pause_all(self) -> None:
+        """
+        Pauses all stopwatches.
+        """
 
         for sw in self._stopwatches.values():
             sw.pause(return_elapsed=False)
@@ -236,6 +323,9 @@ class StopwatchManager:
 
 
     def resume_all(self) -> None:
+        """
+        Resumes all stopwatches.
+        """
 
         for sw in self._stopwatches.values():
             sw.resume()
@@ -243,12 +333,20 @@ class StopwatchManager:
 
 
     def get_all_paused(self) -> dict[str, Stopwatch]:
+        """
+        Returns a dictionary of all paused stopwatches.
+        """
 
         return {stopwatch_id: stopwatch for stopwatch_id, stopwatch in self._stopwatches.items() if stopwatch.is_paused()}
     
 
 
     def is_paused(self, stopwatch_id:str) -> bool:
+        """
+        Returns True if the specified stopwatch is paused.
+
+        stopwatch_id : string id for stopwatch
+        """
 
         stopwatch = self.get_stopwatch(stopwatch_id)
 
@@ -257,12 +355,20 @@ class StopwatchManager:
 
 
     def get_all_running(self) -> dict[str, Stopwatch]:
+        """
+        Returns a dictionary of all running stopwatches.
+        """
 
         return {stopwatch_id: stopwatch for stopwatch_id, stopwatch in self._stopwatches.items() if stopwatch.is_running()}
     
 
 
     def is_running(self, stopwatch_id:str) -> bool:
+        """
+        Returns True if the specified stopwatch is running.
+
+        stopwatch_id : string id for stopwatch
+        """
 
         stopwatch = self.get_stopwatch(stopwatch_id)
 
@@ -271,6 +377,11 @@ class StopwatchManager:
 
 
     def get_time_elapsed(self, stopwatch_id:str) -> float:
+        """
+        Returns the time elapsed for the specified stopwatch.
+
+        stopwatch_id : string id for stopwatch
+        """
 
         stopwatch = self.get_stopwatch(stopwatch_id)
 
@@ -279,6 +390,11 @@ class StopwatchManager:
 
 
     def get_laps(self, stopwatch_id:str) -> list:
+        """
+        Returns a list of the laps of the specified stopwatch.
+
+        stopwatch_id : string id for stopwatch
+        """
 
         stopwatch = self.get_stopwatch(stopwatch_id)
 
@@ -287,6 +403,11 @@ class StopwatchManager:
 
 
     def get_lap_durations(self, stopwatch_id:str) -> list:
+        """
+        Returns a list of the lap durations of the specified stopwatch.
+
+        stopwatch_id : string id for stopwatch
+        """
 
         stopwatch = self.get_stopwatch(stopwatch_id)
 
