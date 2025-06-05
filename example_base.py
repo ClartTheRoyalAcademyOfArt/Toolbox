@@ -15,12 +15,13 @@ class GameWithToolbox(toolbox.Game):
         self.win = toolbox.Window()
         self.event = toolbox.EventManager()
 
-        self.add_update_call_batch(
+        self.add_pre_frame_update_batch(
             (self.event.poll, 0),
             (lambda: self.event.handle_event(pygame.QUIT, self.quit_game), 1),
-            (self.win.clear, 2),
-            (self.win.cycle, 3)
+            (self.win.clear, 2)
         )
+
+        self.add_post_frame_update(self.win.cycle, 0)
 
 
 

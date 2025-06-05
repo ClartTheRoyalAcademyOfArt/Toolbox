@@ -107,7 +107,7 @@ class TimeoutTimer:
     
 
 
-    def time_elapsed(self) -> float:
+    def get_time_elapsed(self) -> float:
         """
         Returns elapsed time.
         """
@@ -116,7 +116,7 @@ class TimeoutTimer:
     
 
 
-    def active(self) -> bool:
+    def is_active(self) -> bool:
         """
         Returns True if active.
         """
@@ -125,7 +125,7 @@ class TimeoutTimer:
 
 
 
-    def timedout(self) -> bool:
+    def is_timedout(self) -> bool:
         """
         Returns if timedout.
         """
@@ -169,10 +169,6 @@ class TimeoutTimer:
 
         return (f"<TimeoutTimer active={self._active} timedout={self._timedout} "
                 f"time_elapsed={self._time_elapsed:.2f}/{self.duration}>")
-
-    
-
-        
 
 
 
@@ -261,7 +257,7 @@ class TimerManager:
         Returns all active timers.
         """
 
-        return {timer_id: t for timer_id, t in self._timers.items() if t.active()}
+        return {timer_id: t for timer_id, t in self._timers.items() if t.is_active()}
     
     
 
@@ -277,7 +273,7 @@ class TimerManager:
         if timer is None:
             raise ValueError(f"Timer '{timer_id}' not found")
         
-        return timer.active()
+        return timer.is_active()
     
 
 
@@ -293,7 +289,7 @@ class TimerManager:
         if timer is None:
             raise ValueError(f"Timer '{timer_id}' not found")
         
-        return timer.time_elapsed()
+        return timer.get_time_elapsed()
 
 
 
@@ -309,7 +305,7 @@ class TimerManager:
         if timer is None:
             raise ValueError(f"Timer '{timer_id}' not found")
         
-        return timer.timedout()
+        return timer.is_timedout()
     
 
 

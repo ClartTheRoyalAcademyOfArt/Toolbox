@@ -6,4 +6,4 @@ from .graphics.renderer import Renderer
 
 from .input.events import EventManager
 
-from .util.time import TimerManager, TimeoutTimer
+from .time.timeout_timer import TimerManager, TimeoutTimer
