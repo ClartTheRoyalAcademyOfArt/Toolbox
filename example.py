@@ -34,12 +34,14 @@ class GameWithToolbox(toolbox.Game):
 
 
         self.timers.create_timer("debug_out", 5.0, self.debug, True)
-        self.timers.create_timer("generate_square", 0.25, self.generate_square, True)
+        self.timers.create_timer("generate_square", 1.0, self.generate_square, True)
 
         self.stopwatches.create_new_stopwatch("window_runtime", True)
+        self.stopwatches.create_new_stopwatch("render_time", True)
 
 
         self.squares = []
+        self.render_time = 0
     
 
 
@@ -57,15 +59,21 @@ class GameWithToolbox(toolbox.Game):
 
         print(f"Runtime: {self.stopwatches.get_time_elapsed("window_runtime"):.2f}")
         self.timers.timers["debug_out"].reset(True)
+
+        print(f"Render time: {self.render_time:.10f}")
     
 
 
     def update(self):
         
+        self.stopwatches.stopwatches["render_time"].reset(True)
+
         for square in self.squares:
             self.renderer.queue("squares", square[0], square[1])
 
         self.renderer.render(self.win.DISPLAY, "squares")
+
+        self.render_time = self.stopwatches.stopwatches["render_time"].stop()
 
 
 
